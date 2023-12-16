@@ -4,7 +4,7 @@ import { createContainer } from 'awilix';
 const container = createContainer();
 
 // Load modules
-const modules = container.loadModules([
+container.loadModules([
   '../../config/*.config.ts',
   '../../core/service/*.service.ts',
   '../../core/repository/*.repository.ts',
