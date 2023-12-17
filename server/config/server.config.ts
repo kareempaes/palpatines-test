@@ -25,12 +25,12 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
 
   // Init palpatine client
   opts.axiosConfig.init(ClientConstant.PALPATINE, {
-    baseURL: process.env.PALPATINE_URL,
-    timeout: 5000,
+    baseURL: process.env.PALPATINES_CONVENIENT_API_URL,
+    // timeout: 5000,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'x-api-key': process.env.PALPATINE_API_KEY,
+      'x-api-key': process.env.PALPATINES_CONVENIENT_API_KEY,
     },
   });
 
