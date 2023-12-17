@@ -14,7 +14,8 @@ const citizenUseCase = container.resolve<CitizenUseCase>('citizenUseCase');
 
 const data = citizenUseCase.getCitizenList()
 .then((citizens) => {
-  console.log(citizens);
+  citizenUseCase.writeToCitizenInfo(citizens);
 })
+
 
 server.start();

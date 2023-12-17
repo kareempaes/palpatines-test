@@ -1,10 +1,11 @@
-import { createReadStream } from 'node:fs';
+import { createReadStream, createWriteStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import split2 from 'split2';
+import HomeWorld from './dto/home-world';
 
 export interface CitizenRepository {
   getSecretCitizenList: () => Promise<string[]>;
-  writeToCitizenInfo: (data: any) => Promise<void>;
+  writeToCitizenInfo: (data: HomeWorld[]) => any;
 }
 
 export interface CitizenRepositoryOptions {}
@@ -32,15 +33,22 @@ const citizenRepository = (opts: CitizenRepositoryOptions): CitizenRepository =>
     });
   };
 
-  const writeToCitizenInfo = async (data: any): Promise<any> => {
+  const writeToCitizenInfo = async (data: HomeWorld[]): Promise<any> => {
     try {
-      const t = await writeFile(
-        'static/citizens-super-secret-info.txt',
-        data,
-        { encoding: 'utf8' }
-      );
+      const writeStream$ = await createWriteStream('static/citizens-super-secret-info.txt');
+      
+      writeStream$.on('end', () => {
+        writeStream$.destroy();
+      });
 
-      console.log('Citizen info written');
+      for (const planet of data) {
+        const line = `${planet.homeworld}\n - ${planet.citizens.join('\n - ')}\n\n`;
+        writeStream$.write(line);
+      }
+      
+
+
+    console.log('Citizen info written');
     } catch (err) {
       console.log(err);
     }

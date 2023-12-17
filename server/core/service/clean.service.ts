@@ -1,7 +1,9 @@
 import Citizen from "../domain/entity/citizen";
+import async, { AsyncResultIteratorPromise } from 'async';
 
 export interface CleanService {
   sanitize: (entityList: Citizen[]) => Citizen[];
+  arrWorker: <T, V>(arr: T[], cb: async.AsyncResultIterator<T, V, Error>) => Promise<Record<string, T[]>>
 }
 
 export interface CleanServiceOptions {
@@ -28,8 +30,14 @@ const cleanService = (opts: CleanServiceOptions): CleanService => {
     return uniqueList;
   }
 
+  const arrWorker = async <T, V>(arr: T[], cb: async.AsyncResultIterator<T, V, Error>) => {
+    const val =  await async.groupBy(arr, cb);
+    return  val;
+  };
+
   return {
     sanitize,
+    arrWorker,
   };
 };
 

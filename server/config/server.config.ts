@@ -15,7 +15,6 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
 
   // Init axios client
   opts.axiosConfig.init(ClientConstant.SWAPI, {
-    baseURL: process.env.SWAPI_URL,
     timeout: 5000,
     headers: {
       'Content-Type': 'application/json',

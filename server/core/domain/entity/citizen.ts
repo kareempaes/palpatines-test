@@ -1,5 +1,3 @@
-
-
 export default interface Citizen {
   name: string;
   url: string;
