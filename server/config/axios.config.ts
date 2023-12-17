@@ -16,9 +16,7 @@ export interface AxiosConfigInitOptions {
 
 
 const axiosConfig = (): AxiosConfig => {
-  const clients = {} as {
-    [key in ClientConstant]: AxiosInstance;
-  };
+  const clients = {} as AxiosConfig['clients'];
 
 
   const init = (name: ClientConstant ,opts: AxiosConfigInitOptions) => {

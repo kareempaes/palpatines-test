@@ -14,14 +14,33 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
   const app = express();
 
   // Init axios client
-  opts.axiosConfig.init(ClientConstant.SWAPI, {});
+  opts.axiosConfig.init(ClientConstant.SWAPI, {
+    baseURL: process.env.SWAPI_URL,
+    timeout: 5000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  });
 
   // Init palpatine client
-  opts.axiosConfig.init(ClientConstant.PALPATINE, {});
+  opts.axiosConfig.init(ClientConstant.PALPATINE, {
+    baseURL: process.env.PALPATINE_URL,
+    timeout: 5000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'x-api-key': process.env.PALPATINE_API_KEY,
+    },
+  });
 
 
   app.get('/_health', (req, res) => {
     res.send('OK');
+  });
+
+  app.get('/api/v1/characters', (req, res) => {
+
   });
 
   const start = () => {
