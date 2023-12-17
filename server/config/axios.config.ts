@@ -2,19 +2,19 @@ import axios, { AxiosInstance } from 'axios';
 import { ClientConstant } from '../core/domain/shared/constants/client.contant';
 
 export interface AxiosConfig {
-  init: (opts: AxiosConfigInitOptions) => void;
+  init: (name: keyof typeof ClientConstant, opts: AxiosConfigInitOptions) => void;
   clients: Map<keyof typeof ClientConstant, AxiosInstance>;
 }
 
 export interface AxiosConfigInitOptions {
-  baseURL: string;
-  timeout: number;
-  headers: any;
+  baseURL?: string;
+  timeout?: number;
+  headers?: any;
 }
 
 
-const axiosConfig = async () => {
-  const clients = {};
+const axiosConfig = async (): Promise<AxiosConfig> => {
+  const clients = new Map<keyof typeof ClientConstant, AxiosInstance>();
 
 
   const init = (name: keyof typeof ClientConstant ,opts: AxiosConfigInitOptions) => {
