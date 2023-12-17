@@ -1,4 +1,4 @@
-import { createContainer } from 'awilix';
+import { Lifetime, asFunction, createContainer } from 'awilix';
 
 // Create container
 const container = createContainer();
@@ -9,6 +9,12 @@ container.loadModules([ // Could be an array of globs with regex e.g. modules/**
   '../../core/service/*.service.ts',
   '../../core/repository/*.repository.ts',
   '../../core/use-case/*.use-case.ts',
-]);
+], {
+  formatName: 'camelCase',
+  resolverOptions: {
+    lifetime: Lifetime.SINGLETON,
+    register: asFunction,
+  },
+});
 
 export default container;
