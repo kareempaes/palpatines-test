@@ -2,8 +2,10 @@ import axios, { AxiosInstance } from 'axios';
 import { ClientConstant } from '../core/domain/shared/constants/client.contant';
 
 export interface AxiosConfig {
-  init: (name: keyof typeof ClientConstant, opts: AxiosConfigInitOptions) => void;
-  clients: Map<keyof typeof ClientConstant, AxiosInstance>;
+  init: (name: ClientConstant, opts: AxiosConfigInitOptions) => void;
+  clients: {
+    [key in ClientConstant]: AxiosInstance;
+  };
 }
 
 export interface AxiosConfigInitOptions {
@@ -13,11 +15,13 @@ export interface AxiosConfigInitOptions {
 }
 
 
-const axiosConfig = async (): Promise<AxiosConfig> => {
-  const clients = new Map<keyof typeof ClientConstant, AxiosInstance>();
+const axiosConfig = (): AxiosConfig => {
+  const clients = {} as {
+    [key in ClientConstant]: AxiosInstance;
+  };
 
 
-  const init = (name: keyof typeof ClientConstant ,opts: AxiosConfigInitOptions) => {
+  const init = (name: ClientConstant ,opts: AxiosConfigInitOptions) => {
     clients[name] = axios.create({
       baseURL: opts.baseURL,
       timeout: opts.timeout,

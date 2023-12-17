@@ -1,20 +1,20 @@
 import { Lifetime, asFunction, createContainer } from 'awilix';
+import server from '../../../config/server.config';
+import axiosConfig from '../../../config/axios.config';
 
 // Create container
 const container = createContainer();
 
-// Load modules
-container.loadModules([ // Could be an array of globs with regex e.g. modules/**/*.js
-  '../../config/*.config.ts',
-  '../../core/service/*.service.ts',
-  '../../core/repository/*.repository.ts',
-  '../../core/use-case/*.use-case.ts',
-], {
-  formatName: 'camelCase',
-  resolverOptions: {
-    lifetime: Lifetime.SINGLETON,
-    register: asFunction,
-  },
+// Register
+container.register({
+  // Our server is a scoped dependency, so we can use Lifetime.SCOPED.
+  // This means that every time we call container.resolve('server') within another function,
+  // That same instance will be reused just for that function.
+  'serverConfig': asFunction(server).scoped(),
+  // Our config is a singleton, so we use Lifetime.SINGLETON.
+  // This means that every time we call container.resolve('server.config'),
+  // we'll get the same instance.
+  'axiosConfig': asFunction(axiosConfig).singleton(),
 });
 
 export default container;

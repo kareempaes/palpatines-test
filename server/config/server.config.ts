@@ -2,17 +2,15 @@ import express from 'express';
 import { AxiosConfig } from './axios.config';
 import { ClientConstant } from '../core/domain/shared/constants/client.contant';
 
-export interface Server {
+export interface ServerConfig {
   start: () => void;
 }
 
-export interface ServerOptions {
+export interface ServerConfigOptions {
   axiosConfig: AxiosConfig;
 }
 
-
-
-const server = async (opts: ServerOptions ) => {
+const server = (opts: ServerConfigOptions ): ServerConfig => {
   const app = express();
 
   // Init axios client
@@ -21,7 +19,7 @@ const server = async (opts: ServerOptions ) => {
   // Init palpatine client
   opts.axiosConfig.init(ClientConstant.PALPATINE, {});
 
-  
+
   app.get('/_health', (req, res) => {
     res.send('OK');
   });
