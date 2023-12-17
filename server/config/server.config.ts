@@ -2,7 +2,7 @@ interface Server {
   start: () => void;
 }
 
-const server = ({ app }) => {
+const server = async ({ app }) => {
 
   app.get('/_health', (req, res) => {
     res.send('OK');

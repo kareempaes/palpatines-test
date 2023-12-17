@@ -4,7 +4,7 @@ import { createContainer } from 'awilix';
 const container = createContainer();
 
 // Load modules
-container.loadModules([
+container.loadModules([ // Could be an array of globs with regex e.g. modules/**/*.js
   '../../config/*.config.ts',
   '../../core/service/*.service.ts',
   '../../core/repository/*.repository.ts',
