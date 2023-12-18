@@ -7,7 +7,7 @@ import { SwapiService } from "../service/swapi.service";
 
 export interface CitizenUseCase {
   getCitizenList: () => Promise<Citizen[]>;
-  writeToCitizenInfo: (data: Citizen[]) => any;
+  writeToCitizenInfo: () => any;
 }
 
 export interface CitizenUseCaseOptions {
@@ -26,12 +26,13 @@ const citizenUseCase = (opts: CitizenUseCaseOptions): CitizenUseCase => {
 
     return opts.cleanService.sanitize(decryptedCitizenData.map((citizen) => {
       return {
-        ... JSON.parse(citizen)
+        ...JSON.parse(citizen)
       } as Citizen;
     }));
   };
 
-  const writeToCitizenInfo = async (data: Citizen[]) => {
+  const writeToCitizenInfo = async () => {
+    const data = await getCitizenList();
     
     const newData = await opts.cleanService.arrWorker(data,  (citizen, callback) => {
       citizen.homeworld = citizen.homeworld.replace('.co', '.dev');
@@ -40,7 +41,10 @@ const citizenUseCase = (opts: CitizenUseCaseOptions): CitizenUseCase => {
 
 
     const homeWorlds: HomeWorld[] = [];
-    const planets = await opts.swapiService.getHomeWorld('https://swapi.co/api/planets/');
+    const planets: Array<{url: string, name: string}> = [
+      {url: 'https://swapi.dev/api/planets/1/', name: 'Tatooine'},
+    ]
+    // const planets = await opts.swapiService.getHomeWorld('https://swapi.co/api/planets/');
 
     for (const planet of planets) {
       if (!newData[planet.url]) {
@@ -49,8 +53,6 @@ const citizenUseCase = (opts: CitizenUseCaseOptions): CitizenUseCase => {
 
       const citizens = newData[planet.url]
       .map((citizen) => citizen.name);
-
-      console.log('bbbllaaah',citizens);
       
       const homeWorld = {
         homeworld: planet.name as string,

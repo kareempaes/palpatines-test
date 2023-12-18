@@ -1,21 +1,26 @@
 import express from 'express';
 import { AxiosConfig } from './axios.config';
 import { ClientConstant } from '../core/domain/shared/constants/client.contant';
+import { CitizenUseCase } from '../core/use-case/citizen.use-case';
 
 export interface ServerConfig {
+  app: express.Application;
   start: () => void;
 }
 
 export interface ServerConfigOptions {
   axiosConfig: AxiosConfig;
+  citizenUseCase: CitizenUseCase;
 }
 
 const server = (opts: ServerConfigOptions ): ServerConfig => {
+  
   const app = express();
 
   // Init axios client
   opts.axiosConfig.init(ClientConstant.SWAPI, {
     timeout: 5000,
+    baseURL: process.env.SWAPI_API_URL,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -25,7 +30,7 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
   // Init palpatine client
   opts.axiosConfig.init(ClientConstant.PALPATINE, {
     baseURL: process.env.PALPATINES_CONVENIENT_API_URL,
-    // timeout: 5000,
+    timeout: 5000,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -38,8 +43,21 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
     res.send('OK');
   });
 
-  app.get('/api/v1/characters', (req, res) => {
+  app.get('/api/citizen', async (req, res) => {
+    const citizens = await opts.citizenUseCase.getCitizenList()
+    
+    res.json(
+      citizens
+    );
+  });
 
+  app.get('/api/citizen/write', async (req, res) => {
+    
+    await opts.citizenUseCase.writeToCitizenInfo();
+
+    res.json({
+      message: 'OK'
+    });
   });
 
   const start = () => {
@@ -50,6 +68,7 @@ const server = (opts: ServerConfigOptions ): ServerConfig => {
 
   return {
     start,
+    app,
   };
 }
 
