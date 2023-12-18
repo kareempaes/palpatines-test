@@ -62,7 +62,6 @@ const citizenUseCase = (opts: CitizenUseCaseOptions): CitizenUseCase => {
       homeWorlds.push(homeWorld);
     }
 
-    console.log(homeWorlds);
     opts.citizenRepository.writeToCitizenInfo(homeWorlds);
   };
 
