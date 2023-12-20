@@ -14,7 +14,10 @@ const swapiService = (opts: SwapiServiceOptions): SwapiService => {
 
   const getHomeWorld = async (url: string) => {
     
+    
     const response = await opts.axiosConfig.clients[ClientConstant.SWAPI].get(url);
+
+    console.log(response.data);
     return response.data.results;
 
     
