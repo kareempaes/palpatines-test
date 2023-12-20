@@ -41,10 +41,11 @@ const citizenUseCase = (opts: CitizenUseCaseOptions): CitizenUseCase => {
 
 
     const homeWorlds: HomeWorld[] = [];
-    const planets: Array<{url: string, name: string}> = [
-      {url: 'https://swapi.dev/api/planets/1/', name: 'Tatooine'},
-    ]
-    // const planets = await opts.swapiService.getHomeWorld('https://swapi.co/api/planets/');
+    // const planets: Array<{url: string, name: string}> = [
+    //   {url: 'https://swapi.dev/api/planets/1/', name: 'Tatooine'},
+    // ]
+
+    const planets = await opts.swapiService.getHomeWorld('https://swapi.dev/api/planets/');
 
     for (const planet of planets) {
       if (!newData[planet.url]) {

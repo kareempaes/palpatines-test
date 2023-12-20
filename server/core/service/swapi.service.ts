@@ -12,12 +12,10 @@ export interface SwapiServiceOptions {
 
 const swapiService = (opts: SwapiServiceOptions): SwapiService => {
 
-  const getHomeWorld = async (url: string) => {
-    
+  const getHomeWorld = async (url: string) => {    
     const response = await opts.axiosConfig.clients[ClientConstant.SWAPI].get(url);
-    return response.data.results;
-
     
+    return response.data.results;
   }
 
 
